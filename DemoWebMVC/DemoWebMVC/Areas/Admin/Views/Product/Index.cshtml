@@ -1,0 +1,194 @@
+﻿
+@{
+    Layout = Layout = "~/Areas/Admin/Views/Shared/_Adminlayout.cshtml"; ;
+}
+@model List<DemoWebMVC.Areas.Admin.Models.Product>
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+    <p class="mb-4">
+        DataTables is a third party plugin that is used to generate the demo table below.
+        For more information about DataTables, please visit the <a target="_blank"
+                                                                   href="https://datatables.net">official DataTables documentation</a>.
+    </p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <div class="dropdown-divider inline-block "></div>
+            <a class="inline btn btn-primary btn-user" href="#" data-toggle="modal" data-target="#AddModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                Add Product
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-bordered display" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </tfoot>
+                    @*<tbody>
+                        @foreach (DemoWebMVC.Areas.Admin.Models.Product item in Model)
+                        {
+                            <tr>
+                                <td>@item.STT</td>
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editProductModal"
+                                            data-id="@item.STT" data-name="@item.Name" data-price="@item.Price" data-quantity="@item.Quantity">
+                                        Sửa
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>*@
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- add Modal-->
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Add?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Create", "Product", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label for="Name">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="productName" name="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Price">Giá</label>
+                        <input type="number" class="form-control" id="price" name="Price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Description">Số lượng</label>
+                        <input type="text" class="form-control" id="quantity" name="Description" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        @*/@Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "btn btn-primary" })*@
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@*edit modal*@
+<!-- Edit Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Chỉnh sửa sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Edit", "Product", FormMethod.Post))
+                {
+                    @Html.Hidden("Id", "", new { id = "editProductId" })
+                    <div class="form-group">
+                        <label for="editProductName">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="editProductName" name="ProductName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPrice">Giá</label>
+                        <input type="number" class="form-control" id="editPrice" name="Price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuantity">Số lượng</label>
+                        <input type="number" class="form-control" id="editQuantity" name="Quantity" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#editProductModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Nút kích hoạt modal
+                var id = button.data('id');
+                var name = button.data('name');
+                var price = button.data('price');
+                var quantity = button.data('quantity');
+                console.log(name);
+                var modal = $(this);
+                modal.find('#editProductId').val(id);
+                modal.find('#editProductName').val(name);
+                modal.find('#editPrice').val(price);
+                modal.find('#editQuantity').val(quantity);
+            });
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "paging": true, // Cho phép phân trang
+                "searching": true, // Cho phép tìm kiếm
+                "ordering": true, // Cho phép sắp xếp
+                "processing": true, // Hiển thị thông báo xử lý
+                "serverSide": false, // Sử dụng server-side processing
+                "responsive": true,
+                "ajax": {
+                    "url": "/Product/LoadData", // URL của endpoint API để load dữ liệu từ server
+                    "type": "POST" // Phương thức HTTP để gửi yêu cầu
+                },
+                "columns": [
+                    { "data": "ID" },
+                    { "data": "Name" },
+                    { "data": "Quantity" },
+                    { "data": "Price" },
+                    {
+                        "data": null, // Sử dụng null vì đây là cột không lấy trực tiếp từ dữ liệu
+                        "render": function (data, type, row) {
+                            return '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editProductModal" ' +
+                                'data-id="' + row.ID + '" data-name="' + row.Name + '" data-price="' + row.Price + '" data-quantity="' + row.Quantity + '">' +
+                                'Sửa</button>';
+                        }
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Vietnamese.json"
+                }
+            });
+        });
+    </script>
+}
